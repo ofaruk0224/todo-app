@@ -1,11 +1,13 @@
+// HTML'deki elemanları bağlıyoruz
 const gorevInput = document.getElementById("gorevInput");
 const gorevEkle = document.getElementById("gorevEkle");
 const gorevListesi = document.getElementById("gorevListesi");
 const temaButonu = document.getElementById("temaButonu");
-
-// Öncelik ve tarih alanları
 const oncelikSecimi = document.getElementById("oncelikSecimi");
 const tarihInput = document.getElementById("tarihInput");
+const siralamaSecimi = document.getElementById("siralamaSecimi");
+const bildirim = document.getElementById("bildirim");
+const geriAlButonu = document.getElementById("geriAlButonu");
 
 const toplam = document.querySelector(".toplam h3");
 const tamamlanan = document.querySelector(".tamamlanan h3");
@@ -14,14 +16,16 @@ const filtreButonlari = document.querySelectorAll(".filtreler button");
 const temizleButonu = document.querySelector(".temizle");
 const temaIkonu = temaButonu.querySelector("i");
 
-// Öncelik değerlerinin ekranda görünecek karşılıkları
 const oncelikEtiketleri = {
   dusuk: "Düşük",
   orta: "Orta",
   yuksek: "Yüksek",
 };
 
-// Burada dark-mode sınıfını açıp kapatacağız.
+// Sıralamada küçük sayı üstte çıkar
+const oncelikSirasi = { yuksek: 0, orta: 1, dusuk: 2 };
+
+// Tema değiştirme
 temaButonu.addEventListener("click", () => {
   document.body.classList.toggle("dark-mode");
 
@@ -36,6 +40,7 @@ temaButonu.addEventListener("click", () => {
   );
 });
 
+// Kayıtlı temayı yükle
 const kayitliTema = localStorage.getItem("tema");
 
 if (kayitliTema === "dark") {
@@ -43,13 +48,16 @@ if (kayitliTema === "dark") {
   temaIkonu.classList.replace("fa-moon", "fa-sun");
 }
 
-// Görevlerin tutulduğu dizi
 let gorevVerileri = [];
 
-// Şu an düzenlenen görevin id'si (hiçbiri düzenlenmiyorsa null)
+// Düzenlenen görevin id'si, yoksa null
 let duzenlenenId = null;
 
-// Bugünün tarihini "2026-11-06" biçiminde verir (date input ile aynı biçim)
+// Son silinen görev ve bildirimin kapanma süresi
+let silinenGorev = null;
+let bildirimZamanlayici = null;
+
+// Bugünün tarihi "2026-11-15" formatında (date input ile aynı)
 function bugununTarihi() {
   const simdi = new Date();
   const yil = simdi.getFullYear();
@@ -58,14 +66,43 @@ function bugununTarihi() {
   return `${yil}-${ay}-${gun}`;
 }
 
+// Tarihi olmayanlar en sona gider
+function tarihKarsilastir(a, b) {
+  if (!a.tarih && !b.tarih) return 0;
+  if (!a.tarih) return 1;
+  if (!b.tarih) return -1;
+  return a.tarih.localeCompare(b.tarih);
+}
+
+// Ana diziye dokunmadan, kopyasını seçime göre sıralar
+function siraliGorevler() {
+  const secim = siralamaSecimi.value;
+  const kopya = [...gorevVerileri].reverse();
+
+  if (secim === "oncelik") {
+    return kopya.sort(
+      (a, b) =>
+        oncelikSirasi[a.oncelik] - oncelikSirasi[b.oncelik] ||
+        tarihKarsilastir(a, b),
+    );
+  }
+  if (secim === "tarih") {
+    return kopya.sort(
+      (a, b) =>
+        tarihKarsilastir(a, b) ||
+        oncelikSirasi[a.oncelik] - oncelikSirasi[b.oncelik],
+    );
+  }
+  return kopya; // eklenme sırası
+}
+
 // Görevleri ekrana çizme
 function gorevleriGoster() {
   gorevListesi.innerHTML = "";
 
-  // Her görev için tekrar hesaplamamak için bir kez alıyoruz
   const bugun = bugununTarihi();
 
-  gorevVerileri.forEach((gorev) => {
+  siraliGorevler().forEach((gorev) => {
     const yeniGorev = document.createElement("li");
     yeniGorev.setAttribute("data-id", gorev.id);
 
@@ -82,8 +119,7 @@ function gorevleriGoster() {
     const gorevOncelik = document.createElement("span");
     const gorevTarih = document.createElement("span");
 
-    // Tarihi var, tamamlanmamış ve tarihi bugünden önceyse gecikmiş sayılır
-    // (aynı biçimdeki tarih metinleri < ile doğru karşılaştırılır)
+    // Tarihi bugünden önceyse ve bitmemişse gecikmiş
     const gecikmisMi = !gorev.tamamlandi && gorev.tarih && gorev.tarih < bugun;
 
     gorevAdi.textContent = gorev.ad;
@@ -97,22 +133,25 @@ function gorevleriGoster() {
 
     gorevOncelik.textContent = oncelikEtiketleri[gorev.oncelik];
 
-    // tarih varsa Türkçe formatla (03.11.2026 gibi), yoksa boş bırak
     if (gorev.tarih) {
-      // "T00:00:00" ekleyerek saat dilimi kaynaklı bir gün kaymasını önlüyoruz
+      // T00:00:00 gün kaymasını engelliyor
       gorevTarih.textContent = new Date(
         gorev.tarih + "T00:00:00",
       ).toLocaleDateString("tr-TR");
     }
 
+    // CSS için sınıflar
     checkbox.classList.add("gorev-checkbox");
     tikIkonu.classList.add("fa-solid", "fa-check");
     gorevAdi.classList.add("gorev-adi");
     gorevDurum.classList.add("gorev-durum");
     silButonu.classList.add("gorev-sil");
     copKutusuIkon.classList.add("fa-regular", "fa-trash-can");
+    gorevOncelik.classList.add("gorev-oncelik");
+    gorevTarih.classList.add("gorev-tarih");
+    yeniGorev.classList.add("oncelik-" + gorev.oncelik);
 
-    // bu görev şu an düzenleniyor mu? Düzenleniyorsa kalem yerine tik göster
+    // Düzenlenirken kalem yerine tik göster
     const duzenleniyorMu = gorev.id === duzenlenenId;
     duzenleButonu.classList.add("gorev-duzenle");
     duzenleIkonu.classList.add(
@@ -121,17 +160,12 @@ function gorevleriGoster() {
     );
     duzenleButonu.appendChild(duzenleIkonu);
 
-    // CSS'te renk vermek için sınıflar
-    gorevOncelik.classList.add("gorev-oncelik");
-    gorevTarih.classList.add("gorev-tarih");
-    yeniGorev.classList.add("oncelik-" + gorev.oncelik);
-
     checkbox.appendChild(tikIkonu);
     silButonu.appendChild(copKutusuIkon);
 
     yeniGorev.appendChild(checkbox);
 
-    // Düzenleme modunda ad, öncelik ve tarih yerine düzenlenebilir alanlar göster
+    // Düzenleme modunda yazı yerine input, select ve date göster
     if (duzenleniyorMu) {
       const duzenlemeInput = document.createElement("input");
       duzenlemeInput.type = "text";
@@ -140,7 +174,6 @@ function gorevleriGoster() {
 
       const duzenlemeOncelik = document.createElement("select");
       duzenlemeOncelik.classList.add("gorev-duzenle-oncelik");
-      // oncelikEtiketleri nesnesindeki her öncelik için bir seçenek oluştur
       Object.keys(oncelikEtiketleri).forEach((anahtar) => {
         const secenek = document.createElement("option");
         secenek.value = anahtar;
@@ -180,15 +213,18 @@ function gorevleriGoster() {
   filtreyiUygula();
   istatistikGuncelle();
 
-  // Düzenleme açıksa input'a odaklan, imleci yazının sonuna koy
+  // Düzenleme açıksa input'a odaklan, imleç sona
   const aktifInput = gorevListesi.querySelector(".gorev-duzenle-input");
   if (aktifInput) {
     aktifInput.focus();
-    aktifInput.setSelectionRange(aktifInput.value.length, aktifInput.value.length);
+    aktifInput.setSelectionRange(
+      aktifInput.value.length,
+      aktifInput.value.length,
+    );
   }
 }
 
-// Filtreleme
+// Filtreleme (görevi silmiyor, sadece gizliyor)
 function filtreyiUygula() {
   const aktifButon = document.querySelector(".filtreler button.aktif");
   const filtre = aktifButon ? aktifButon.textContent.trim() : "Tümü";
@@ -219,7 +255,7 @@ filtreButonlari.forEach((buton) => {
   });
 });
 
-// Görev ekleme (buton ve Enter tuşu aynı fonksiyonu kullanır)
+// Görev ekleme (buton ve Enter aynı fonksiyonu kullanıyor)
 function gorevEklemeIslemi() {
   const gorev = gorevInput.value.trim();
 
@@ -228,20 +264,16 @@ function gorevEklemeIslemi() {
     return;
   }
 
-  const gorevId = Date.now();
-
   gorevVerileri.push({
-    id: gorevId,
+    id: Date.now(),
     ad: gorev,
     tamamlandi: false,
-    // Alanlar bulunamazsa varsayılan değer kullanılır
     oncelik: oncelikSecimi ? oncelikSecimi.value : "orta",
     tarih: tarihInput ? tarihInput.value : "",
   });
 
+  // Alanları sıfırla
   gorevInput.value = "";
-
-  // ekledikten sonra öncelik ve tarih alanlarını sıfırla
   if (oncelikSecimi) oncelikSecimi.value = "orta";
   if (tarihInput) tarihInput.value = "";
 
@@ -251,7 +283,6 @@ function gorevEklemeIslemi() {
 
 gorevEkle.addEventListener("click", gorevEklemeIslemi);
 
-// Enter tuşuyla ekleme
 gorevInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     gorevEklemeIslemi();
@@ -270,42 +301,42 @@ function istatistikGuncelle() {
   bekleyen.textContent = gorevVerileri.length - tamamlananSayisi;
 }
 
-// Görevlerin tıklamalarını yönetme
+// Liste içindeki tüm tıklamalar burada (sil, tamamla, düzenle)
 gorevListesi.addEventListener("click", (e) => {
   const silButonu = e.target.closest(".gorev-sil");
   const tamamlaButonu = e.target.closest(".gorev-checkbox");
   const duzenleButonu = e.target.closest(".gorev-duzenle");
 
-  // Düzenleme işlemi
   if (duzenleButonu) {
     const gorevId = Number(duzenleButonu.closest("li").dataset.id);
 
     if (duzenlenenId === gorevId) {
-      // Zaten düzenleniyor, tik'e basıldı: kaydet
       gorevDuzenlemeyiKaydet();
     } else {
-      // Düzenleme modunu aç
       duzenlenenId = gorevId;
       gorevleriGoster();
     }
     return;
   }
 
-  // Silme işlemi
   if (silButonu) {
     const gorev = silButonu.closest("li");
     const gorevId = Number(gorev.dataset.id);
 
+    // Geri alabilmek için görevi ve yerini saklıyoruz
+    const index = gorevVerileri.findIndex((item) => item.id === gorevId);
+    if (index === -1) return;
+    silinenGorev = { veri: gorevVerileri[index], index };
+
     gorevVerileri = gorevVerileri.filter((item) => item.id !== gorevId);
 
-    // Silinen görev düzenleniyorsa düzenleme modunu kapat
     if (duzenlenenId === gorevId) duzenlenenId = null;
 
     gorevleriGoster();
     gorevleriKaydet();
+    bildirimGoster();
   }
 
-  // Tamamlama işlemi
   if (tamamlaButonu) {
     const gorev = tamamlaButonu.closest("li");
     const gorevId = Number(gorev.dataset.id);
@@ -321,7 +352,7 @@ gorevListesi.addEventListener("click", (e) => {
   }
 });
 
-// Düzenlenen görevin yeni adını kaydetme
+// Düzenlenen görevi kaydetme
 function gorevDuzenlemeyiKaydet() {
   const input = gorevListesi.querySelector(".gorev-duzenle-input");
   const oncelikAlani = gorevListesi.querySelector(".gorev-duzenle-oncelik");
@@ -347,7 +378,7 @@ function gorevDuzenlemeyiKaydet() {
   gorevleriKaydet();
 }
 
-// Düzenleme sırasında Enter = kaydet, Escape = vazgeç
+// Düzenlerken Enter = kaydet, Escape = vazgeç
 gorevListesi.addEventListener("keydown", (e) => {
   if (
     !e.target.matches(
@@ -366,10 +397,8 @@ gorevListesi.addEventListener("keydown", (e) => {
 
 // Tüm görevleri temizleme
 temizleButonu.addEventListener("click", () => {
-  // Liste zaten boşsa sormaya gerek yok
   if (gorevVerileri.length === 0) return;
 
-  // Kullanıcı "İptal" derse fonksiyondan çık, hiçbir şey silinmesin
   if (!confirm("Tüm görevler silinecek. Emin misin?")) return;
 
   gorevVerileri = [];
@@ -379,12 +408,45 @@ temizleButonu.addEventListener("click", () => {
   gorevleriKaydet();
 });
 
-// Görevleri JSON olarak kaydetme
+// Sıralama değişince listeyi yenile ve seçimi kaydet
+siralamaSecimi.addEventListener("change", () => {
+  localStorage.setItem("siralama", siralamaSecimi.value);
+  gorevleriGoster();
+});
+
+const kayitliSiralama = localStorage.getItem("siralama");
+if (kayitliSiralama) siralamaSecimi.value = kayitliSiralama;
+
+// Bildirimi 5 saniye göster, sonra kapat
+function bildirimGoster() {
+  bildirim.classList.add("goster");
+  clearTimeout(bildirimZamanlayici);
+  bildirimZamanlayici = setTimeout(() => {
+    bildirim.classList.remove("goster");
+    silinenGorev = null;
+  }, 5000);
+}
+
+geriAlButonu.addEventListener("click", () => {
+  if (!silinenGorev) return;
+
+  // Görevi eski yerine geri koy
+  gorevVerileri.splice(silinenGorev.index, 0, silinenGorev.veri);
+  silinenGorev = null;
+
+  clearTimeout(bildirimZamanlayici);
+  bildirim.classList.remove("goster");
+
+  gorevleriGoster();
+  gorevleriKaydet();
+});
+
+// LocalStorage'a kaydetme
 function gorevleriKaydet() {
   localStorage.setItem("gorevler", JSON.stringify(gorevVerileri));
 }
 
-// Görevleri yükleme
+// LocalStorage'dan yükleme
 function gorevleriYukle() {
   const kayitliGorevler = localStorage.getItem("gorevler");
 
@@ -397,7 +459,7 @@ function gorevleriYukle() {
     }
   }
 
-  // Eski kayıtlı görevlerde oncelik/tarih yok, varsayılan değer ver
+  // Eski görevlerde öncelik/tarih yoksa varsayılan ver
   gorevVerileri = gorevVerileri.map((gorev) => ({
     ...gorev,
     oncelik: gorev.oncelik || "orta",
@@ -407,5 +469,4 @@ function gorevleriYukle() {
   gorevleriGoster();
 }
 
-// Sayfa açıldığında görevleri yükle
 gorevleriYukle();

@@ -219,6 +219,7 @@ input {
 
 input::placeholder {
   color: var(--ikincil-metin);
+  opacity: 1;
 }
 
 input:focus {
@@ -321,6 +322,12 @@ button:active {
   color: #ffffff;
   border: 1px solid #3988f5;
   box-shadow: 0 3px 8px rgba(57, 136, 245, 0.25);
+}
+
+/* Sıralama seçimi */
+#siralamaSecimi {
+  padding: 10px 14px;
+  font-size: 14px;
 }
 
 /* Tümünü temizle */
@@ -591,6 +598,45 @@ body.dark-mode .gorev-duzenle:hover {
   font-size: 14px;
 }
 
+/* Silme sonrası geri alma bildirimi (açık tema) */
+.bildirim {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 14px 12px 20px;
+  background-color: #172033;
+  color: #f8fafc;
+  border-radius: 12px;
+  font-size: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+  /* Gizliyken aşağıda ve görünmez */
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 20px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    visibility 0.3s;
+}
+
+.bildirim.goster {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+.bildirim button {
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
 /* Alt yazı */
 .alt-yazi {
   color: var(--ikincil-metin);
@@ -599,7 +645,7 @@ body.dark-mode .gorev-duzenle:hover {
   font-size: 15px;
 }
 
-/* Karanlık mod filtre ve temizle butonları */
+/* Karanlık mod: filtre, temizle, form elemanları, bildirim */
 body.dark-mode .filtreler button {
   background-color: #273449;
   color: #cbd5e1;
@@ -622,7 +668,6 @@ body.dark-mode .temizle:hover {
   background-color: #573044;
 }
 
-/* select de karanlık modda input gibi görünsün */
 body.dark-mode input,
 body.dark-mode select {
   background-color: #273449;
@@ -633,6 +678,12 @@ body.dark-mode select {
 body.dark-mode input::placeholder {
   color: #cbd5e1;
   opacity: 1;
+}
+
+body.dark-mode .bildirim {
+  background-color: #334155;
+  color: #f8fafc;
+  border: 1px solid #475569;
 }
 
 /* Tablet uyumluluğu */
@@ -666,6 +717,11 @@ body.dark-mode input::placeholder {
 
   .gorev-secenekler input {
     flex: 1;
+  }
+
+  /* Filtre, sıralama ve temizle sığmazsa alt satıra geçsin */
+  .filtre-alani {
+    flex-wrap: wrap;
   }
 }
 
@@ -711,6 +767,10 @@ body.dark-mode input::placeholder {
     padding: 10px;
   }
 
+  #siralamaSecimi {
+    width: 100%;
+  }
+
   .gorev-ekle {
     flex-direction: column;
     align-items: stretch;
@@ -746,6 +806,13 @@ body.dark-mode input::placeholder {
 
   .gorev-duzenle {
     margin-left: auto;
+  }
+
+  /* Bildirim ekran genişliğine yayılsın, iPhone alt çubuğunun üstünde kalsın */
+  .bildirim {
+    width: calc(100% - 36px);
+    justify-content: space-between;
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -786,10 +853,4 @@ input:focus-visible,
 select:focus-visible {
   outline: 3px solid #60a5fa;
   outline-offset: 3px;
-}
-
-/* Input açıklama yazısı */
-input::placeholder {
-  color: var(--ikincil-metin);
-  opacity: 1;
 }

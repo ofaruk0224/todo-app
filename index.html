@@ -77,12 +77,23 @@
           <button><i class="fa-solid fa-circle-check"></i> Tamamlanan</button>
         </div>
 
+        <select id="siralamaSecimi" aria-label="Sıralama">
+          <option value="eklenme">Eklenme sırası</option>
+          <option value="oncelik">Önceliğe göre</option>
+          <option value="tarih">Tarihe göre</option>
+        </select>
+
         <button class="temizle">
           <i class="fa-regular fa-trash-can"></i> Tümünü Temizle
         </button>
       </div>
 
       <ul id="gorevListesi"></ul>
+    </div>
+
+    <div id="bildirim" class="bildirim">
+      <span>Görev silindi</span>
+      <button id="geriAlButonu">Geri al</button>
     </div>
 
     <script src="main.js"></script>
