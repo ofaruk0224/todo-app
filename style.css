@@ -1,0 +1,795 @@
+/* Tema renkleri */
+:root {
+  --arka-plan: #eaf0f8;
+  --kutu: #ffffff;
+  --metin: #172033;
+  --gorev-arkaplan: #f8fafc;
+  --kenarlik: #e2e8f0;
+  --ikincil-metin: #64748b;
+  color-scheme: light;
+}
+
+body.dark-mode {
+  --arka-plan: #0f172a;
+  --kutu: #1e293b;
+  --metin: #f8fafc;
+  --gorev-arkaplan: #273449;
+  --kenarlik: #334155;
+  --ikincil-metin: #cbd5e1;
+  color-scheme: dark;
+}
+
+/* Genel ayarlar */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--metin);
+  background-color: var(--arka-plan);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ana kutu */
+.container {
+  position: relative;
+  width: 850px;
+  max-width: 90%;
+  background-color: var(--kutu);
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  padding: 15px 30px;
+}
+
+/* Üst bölüm */
+.ust-bolum {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.baslik {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.baslik-ikon {
+  font-size: 55px;
+  color: #2563eb;
+}
+
+.baslik-yazi h1 {
+  color: var(--metin);
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+
+.baslik-yazi p {
+  color: var(--ikincil-metin);
+  margin: 0;
+}
+
+h1 {
+  color: var(--metin);
+  margin-bottom: 10px;
+  font-size: 42px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+h1 i {
+  color: #1d4ed8;
+  font-size: 42px;
+}
+
+p {
+  color: var(--ikincil-metin);
+  margin-bottom: 10px;
+}
+
+/* Tema butonu */
+#temaButonu {
+  position: fixed;
+  top: 22px;
+  right: 22px;
+  z-index: 1000;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--kutu);
+  color: var(--metin);
+  border: 1px solid var(--kenarlik);
+  border-radius: 12px;
+  font-size: 19px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease,
+    transform 0.2s ease;
+}
+
+#temaButonu:hover {
+  background-color: var(--gorev-arkaplan);
+  transform: translateY(-2px);
+}
+
+/* İstatistik kutuları */
+.istatistikler {
+  display: flex;
+  gap: 12px;
+}
+
+.toplam,
+.tamamlanan,
+.bekleyen {
+  position: relative;
+  width: 145px;
+  height: 90px;
+  flex: none;
+  background-color: var(--gorev-arkaplan);
+  border: 1px solid var(--kenarlik);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* İstatistik başlıkları */
+.istatistikler p {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ikincil-metin);
+  margin: 0;
+}
+
+/* İstatistik ikonları */
+.istatistikler > div > i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 30px;
+}
+
+.toplam > i,
+.toplam h3 {
+  color: #2563eb;
+}
+
+.tamamlanan > i,
+.tamamlanan h3 {
+  color: #16a34a;
+}
+
+.bekleyen > i,
+.bekleyen h3 {
+  color: #7c3aed;
+}
+
+/* İstatistik sayıları */
+.istatistikler h3 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Görev ekleme alanı */
+.gorev-ekle {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 25px;
+}
+
+.gorev-ekle button {
+  min-width: 120px;
+  padding: 14px 30px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--kenarlik);
+  border-radius: 10px;
+  font-size: 15px;
+  flex: 1;
+  background-color: var(--kutu);
+  color: var(--metin);
+}
+
+input::placeholder {
+  color: var(--ikincil-metin);
+}
+
+input:focus {
+  outline: 2px solid #3988f5;
+  border-color: #3988f5;
+}
+
+.input-alani {
+  position: relative;
+  flex: 1;
+}
+
+.input-alani input {
+  width: 100%;
+  padding-left: 42px;
+}
+
+.input-alani > i {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ikincil-metin);
+  font-size: 16px;
+}
+
+/* Öncelik ve tarih seçimi */
+.gorev-secenekler {
+  display: flex;
+  gap: 10px;
+  flex: none;
+}
+
+/* Genel input kuralı (width: 100%; flex: 1) bu alandaki tarih kutusunu bozmasın */
+.gorev-secenekler input {
+  width: auto;
+  flex: none;
+}
+
+select {
+  padding: 14px;
+  border: 1px solid var(--kenarlik);
+  border-radius: 10px;
+  font-size: 15px;
+  background-color: var(--kutu);
+  color: var(--metin);
+  cursor: pointer;
+}
+
+select:focus {
+  outline: 2px solid #3988f5;
+  border-color: #3988f5;
+}
+
+/* Genel butonlar */
+button {
+  background-color: #3988f5;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 24px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:hover {
+  background-color: #2563eb;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Filtre alanı */
+.filtre-alani {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  gap: 10px;
+}
+
+.filtreler {
+  display: flex;
+  gap: 8px;
+}
+
+.filtreler button {
+  background-color: var(--gorev-arkaplan);
+  color: var(--ikincil-metin);
+  border: 1px solid var(--kenarlik);
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.filtreler button.aktif {
+  background-color: #3988f5;
+  color: #ffffff;
+  border: 1px solid #3988f5;
+  box-shadow: 0 3px 8px rgba(57, 136, 245, 0.25);
+}
+
+/* Tümünü temizle */
+.temizle {
+  background-color: #fce7f3;
+  color: #be123c;
+  border: 1px solid #fbcfe8;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.temizle:hover {
+  background-color: #fbcfe8;
+  color: #be123c;
+}
+
+/* Görev listesi */
+ul {
+  list-style: none;
+  margin-top: 20px;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 12px;
+  padding: 15px;
+  background-color: var(--gorev-arkaplan);
+  border: 1px solid var(--kenarlik);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  transition: 0.2s ease;
+}
+
+li:hover {
+  transform: translateY(-3px);
+  background-color: #eff6ff;
+}
+
+body.dark-mode li:hover {
+  background-color: #334155;
+}
+
+.gorev-adi {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--metin);
+}
+
+/* Öncelik etiketi */
+.gorev-oncelik {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.oncelik-dusuk .gorev-oncelik {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.oncelik-orta .gorev-oncelik {
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+.oncelik-yuksek .gorev-oncelik {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+body.dark-mode .oncelik-dusuk .gorev-oncelik {
+  background-color: rgba(34, 197, 94, 0.18);
+  color: #86efac;
+}
+
+body.dark-mode .oncelik-orta .gorev-oncelik {
+  background-color: rgba(234, 179, 8, 0.18);
+  color: #fde047;
+}
+
+body.dark-mode .oncelik-yuksek .gorev-oncelik {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+/* Tarih */
+.gorev-tarih {
+  font-size: 13px;
+  color: var(--ikincil-metin);
+  flex-shrink: 0;
+}
+
+/* Tarih girilmediyse boş yer kaplamasın */
+.gorev-tarih:empty {
+  display: none;
+}
+
+/* Görev tamamlama butonu */
+.gorev-checkbox {
+  background-color: #ffffff;
+  border: 2px solid #3988f5;
+  color: #ffffff;
+  font-size: 15px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.gorev-checkbox i {
+  line-height: 1;
+}
+
+li.tamamlandi {
+  background-color: #f0fdf4;
+}
+
+body.dark-mode li.tamamlandi {
+  background-color: #183b2b;
+}
+
+/* Tamamlanan görevlerin yeşil tiki */
+li.tamamlandi .gorev-checkbox {
+  background-color: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+  font-size: 15px;
+}
+
+/* Tamamlanan görev yazısı */
+li.tamamlandi .gorev-adi {
+  color: #64748b;
+  text-decoration: line-through;
+}
+
+body.dark-mode li.tamamlandi .gorev-adi {
+  color: #a7c9b5;
+}
+
+/* Görev durumları */
+.gorev-durum {
+  background-color: var(--kenarlik);
+  color: var(--metin);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+li.tamamlandi .gorev-durum {
+  color: #15803d;
+  background-color: #dcfce7;
+}
+
+li:not(.tamamlandi) .gorev-durum {
+  color: var(--metin);
+  background-color: var(--kenarlik);
+}
+
+body.dark-mode li.tamamlandi .gorev-durum {
+  color: #86efac;
+  background-color: #14532d;
+}
+
+/* Tarihi geçmiş (gecikmiş) görev */
+li.gecikmis {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+}
+
+li.gecikmis .gorev-tarih {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+li.gecikmis .gorev-durum {
+  color: #b91c1c;
+  background-color: #fee2e2;
+}
+
+body.dark-mode li.gecikmis {
+  background-color: #3b1d24;
+  border-color: #7f1d1d;
+}
+
+body.dark-mode li.gecikmis .gorev-tarih {
+  color: #fca5a5;
+}
+
+body.dark-mode li.gecikmis .gorev-durum {
+  color: #fca5a5;
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+/* Görev silme butonu */
+.gorev-sil {
+  background-color: #fce7f3;
+  color: #be123c;
+  padding: 8px 12px;
+  border: 1px solid #fbcfe8;
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: none;
+  flex-shrink: 0;
+}
+
+.gorev-sil:hover {
+  background-color: #f9c2e1;
+  color: #be123c;
+}
+
+/* Görev düzenleme butonu */
+.gorev-duzenle {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  padding: 8px 12px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.gorev-duzenle:hover {
+  background-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+body.dark-mode .gorev-duzenle {
+  background-color: #1e3a5f;
+  color: #93c5fd;
+  border-color: #1d4ed8;
+}
+
+body.dark-mode .gorev-duzenle:hover {
+  background-color: #254b7a;
+}
+
+/* Düzenleme sırasındaki input (genel input kuralını ezer) */
+.gorev-duzenle-input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  font-size: 15px;
+}
+
+/* Düzenleme sırasındaki öncelik ve tarih alanları */
+.gorev-duzenle-oncelik,
+.gorev-duzenle-tarih {
+  flex: none;
+  width: auto;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+/* Alt yazı */
+.alt-yazi {
+  color: var(--ikincil-metin);
+  text-align: center;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+/* Karanlık mod filtre ve temizle butonları */
+body.dark-mode .filtreler button {
+  background-color: #273449;
+  color: #cbd5e1;
+  border-color: #475569;
+}
+
+body.dark-mode .filtreler button.aktif {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+body.dark-mode .temizle {
+  background-color: #3b2635;
+  color: #fda4af;
+  border-color: #713347;
+}
+
+body.dark-mode .temizle:hover {
+  background-color: #573044;
+}
+
+/* select de karanlık modda input gibi görünsün */
+body.dark-mode input,
+body.dark-mode select {
+  background-color: #273449;
+  color: #f8fafc;
+  border-color: #475569;
+}
+
+body.dark-mode input::placeholder {
+  color: #cbd5e1;
+  opacity: 1;
+}
+
+/* Tablet uyumluluğu */
+@media (max-width: 900px) {
+  .ust-bolum {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .istatistikler {
+    width: 100%;
+  }
+
+  .istatistikler > div {
+    flex: 1;
+    width: auto;
+  }
+
+  /* Dar ekranda ekleme alanı alt satıra sarsın */
+  .gorev-ekle {
+    flex-wrap: wrap;
+  }
+
+  .gorev-ekle .input-alani {
+    flex: 1 1 100%;
+  }
+
+  .gorev-secenekler {
+    flex: 1;
+  }
+
+  .gorev-secenekler input {
+    flex: 1;
+  }
+}
+
+/* Mobil uyumluluk */
+@media (max-width: 600px) {
+  .container {
+    padding: 70px 18px 18px;
+  }
+
+  #temaButonu {
+    top: 15px;
+    right: 15px;
+  }
+
+  .istatistikler {
+    gap: 8px;
+  }
+
+  .istatistikler > div > i {
+    font-size: 22px;
+    left: 8px;
+  }
+
+  .istatistikler p {
+    font-size: 11px;
+  }
+
+  .istatistikler h3 {
+    font-size: 24px;
+  }
+
+  .filtre-alani {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtreler {
+    flex-wrap: wrap;
+  }
+
+  .filtreler button {
+    flex: 1;
+    padding: 10px;
+  }
+
+  .gorev-ekle {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gorev-ekle .input-alani,
+  .gorev-ekle button,
+  .gorev-secenekler {
+    width: 100%;
+  }
+
+  /* select ve tarih yan yana, eşit genişlikte */
+  .gorev-secenekler select,
+  .gorev-secenekler input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* görev satırı iki satıra bölünsün (ad üstte, etiketler altta) */
+  li {
+    flex-wrap: wrap;
+  }
+
+  .gorev-adi,
+  .gorev-duzenle-input {
+    flex: 1 1 calc(100% - 40px);
+  }
+
+  .gorev-oncelik,
+  .gorev-duzenle-oncelik {
+    margin-left: 34px;
+  }
+
+  .gorev-duzenle {
+    margin-left: auto;
+  }
+}
+
+/* Tema geçişleri */
+body,
+.container,
+.baslik-yazi h1,
+.baslik-yazi p,
+.istatistikler > div,
+.istatistikler p,
+.gorev-adi,
+.gorev-durum,
+li,
+input,
+select,
+.alt-yazi,
+.filtreler button,
+.temizle {
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+/* Hareket azaltma tercihi */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Klavye ile odaklanma görünümü */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+/* Input açıklama yazısı */
+input::placeholder {
+  color: var(--ikincil-metin);
+  opacity: 1;
+}

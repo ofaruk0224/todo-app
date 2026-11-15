@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo App</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <button id="temaButonu">
+      <i class="fa-solid fa-moon"></i>
+    </button>
+    <div class="container">
+      <div class="ust-bolum">
+        <div class="baslik">
+          <i class="fa-solid fa-calendar-check baslik-ikon"></i>
+
+          <div class="baslik-yazi">
+            <h1>Todo App</h1>
+            <p>Yapılacaklarını kolayca yönet!</p>
+          </div>
+        </div>
+
+        <div class="istatistikler">
+          <div class="toplam">
+            <p>Toplam</p>
+            <i class="fa-solid fa-list-check"></i>
+            <h3>0</h3>
+          </div>
+
+          <div class="tamamlanan">
+            <p>Tamamlanan</p>
+            <i class="fa-solid fa-circle-check"></i>
+            <h3>0</h3>
+          </div>
+
+          <div class="bekleyen">
+            <p>Bekleyen</p>
+            <i class="fa-solid fa-clock"></i>
+            <h3>0</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="gorev-ekle">
+        <div class="input-alani">
+          <i class="fa-solid fa-pen"></i>
+          <input
+            id="gorevInput"
+            placeholder="Yeni bir görev ekleyin..."
+            type="text"
+          />
+        </div>
+
+        <!-- öncelik ve tarih seçimi -->
+        <div class="gorev-secenekler">
+          <select id="oncelikSecimi" aria-label="Öncelik">
+            <option value="dusuk">Düşük</option>
+            <option value="orta" selected>Orta</option>
+            <option value="yuksek">Yüksek</option>
+          </select>
+          <input type="date" id="tarihInput" aria-label="Tarih" />
+        </div>
+
+        <button id="gorevEkle"><i class="fa-solid fa-plus"></i> Ekle</button>
+      </div>
+
+      <div class="filtre-alani">
+        <div class="filtreler">
+          <button class="aktif"><i class="fa-solid fa-list"></i> Tümü</button>
+          <button><i class="fa-solid fa-clock"></i> Bekleyen</button>
+          <button><i class="fa-solid fa-circle-check"></i> Tamamlanan</button>
+        </div>
+
+        <button class="temizle">
+          <i class="fa-regular fa-trash-can"></i> Tümünü Temizle
+        </button>
+      </div>
+
+      <ul id="gorevListesi"></ul>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+</html>
