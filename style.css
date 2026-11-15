@@ -555,6 +555,17 @@ body.dark-mode li.gecikmis .gorev-durum {
   color: #be123c;
 }
 
+/* Koyu temada sil butonu, "Tümünü Temizle" ile aynı renklerde */
+body.dark-mode .gorev-sil {
+  background-color: #3b2635;
+  color: #fda4af;
+  border-color: #713347;
+}
+
+body.dark-mode .gorev-sil:hover {
+  background-color: #573044;
+}
+
 /* Görev düzenleme butonu */
 .gorev-duzenle {
   background-color: #dbeafe;
@@ -653,9 +664,21 @@ body.dark-mode .filtreler button {
 }
 
 body.dark-mode .filtreler button.aktif {
-  background-color: #2563eb;
-  color: #ffffff;
-  border-color: #2563eb;
+  background-color: #1e3a5f;
+  color: #93c5fd;
+  border-color: #1d4ed8;
+  box-shadow: none;
+}
+
+/* Koyu temada Ekle butonu, kalem butonuyla aynı renklerde */
+body.dark-mode #gorevEkle {
+  background-color: #1e3a5f;
+  color: #93c5fd;
+  border: 1px solid #1d4ed8;
+}
+
+body.dark-mode #gorevEkle:hover {
+  background-color: #254b7a;
 }
 
 body.dark-mode .temizle {
